@@ -11,11 +11,11 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1819107922060720');
+fbq('init', '1336983984445713');
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1819107922060720&ev=PageView&noscript=1"
+src="https://www.facebook.com/tr?id=1336983984445713&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
@@ -449,7 +449,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
 
   <div class="counter-bar">⚡ <strong id="lc">247</strong> pessoas acessaram nas últimas 2 horas · Vagas limitadas</div>
 
-  <a href="#cta-principal" class="btn" onclick="try{fbq('track','InitiateCheckout')}catch(e){}">
+  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
     QUERO SABER O PLACAR ANTES DO APITO
     <span class="btn-sub">R$ 5,90 · Entrega imediata no WhatsApp e E-mail 🔒</span>
   </a>
@@ -636,7 +636,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
       <li>Liberação imediata</li>
       <li>Garantia de 7 dias</li>
     </ul>
-    <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn" onclick="try{fbq('track','InitiateCheckout')}catch(e){}">
+    <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
       QUERO SABER O PLACAR ANTES DO APITO
       <span class="btn-sub">Pix ou cartão · Entrega imediata no WhatsApp e E-mail</span>
     </a>
@@ -699,13 +699,20 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
      BOTÃO FLUTUANTE
 ════════════════════════════════ -->
 <div class="sticky-btn">
-  <a href="#cta-principal" class="btn" onclick="try{fbq('track','InitiateCheckout')}catch(e){}">
+  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
     SABER O PLACAR ANTES DO APITO — R$5,90
     <span class="btn-sub">Acesso imediato · Garantia de 7 dias</span>
   </a>
 </div>
 
 <script>
+
+// Pixel InitiateCheckout - dispara uma vez por clique
+document.querySelectorAll('.btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    try{ fbq('track','InitiateCheckout'); }catch(e){}
+  });
+});
 
 // Bolão ranking animation
 const bolaoPlayers = [
