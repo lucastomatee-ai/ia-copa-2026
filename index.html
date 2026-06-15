@@ -658,14 +658,25 @@ setInterval(function(){
   el.textContent = n;
 }, 4200);
 
-// ── Pixel InitiateCheckout SOMENTE nos botões de checkout ──
-// Dispara o pixel e depois deixa o href abrir normalmente (target="_blank")
+// ── Pixel InitiateCheckout — disparo único com flag ──
+var _pixelFired = false;
+function fireCheckout() {
+  if (_pixelFired) return;
+  _pixelFired = true;
+  try { fbq('track', 'InitiateCheckout'); } catch(e){}
+  // reseta após 3s para permitir nova tentativa se usuário voltar
+  setTimeout(function(){ _pixelFired = false; }, 3000);
+}
+
 ['btn-checkout-oferta','btn-sticky'].forEach(function(id){
   var btn = document.getElementById(id);
   if(!btn) return;
-  btn.addEventListener('click', function(){
-    try { fbq('track', 'InitiateCheckout'); } catch(e){}
-    // href="_blank" já cuida de abrir o link — não precisa de window.open
+  btn.addEventListener('click', function(e){
+    fireCheckout();
+    // abre o link manualmente para garantir que pixel dispara antes
+    e.preventDefault();
+    var url = btn.getAttribute('href');
+    setTimeout(function(){ window.open(url, '_blank'); }, 150);
   });
 });
 
