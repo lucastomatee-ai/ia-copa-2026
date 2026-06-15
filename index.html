@@ -644,24 +644,14 @@ setInterval(function(){
 }, 4200);
 
 // ── Pixel InitiateCheckout — disparo único com flag ──
+// Pixel dispara no clique sem bloquear o href/_blank
 var _pixelFired = false;
-function fireCheckout() {
+document.getElementById('btn-checkout-oferta').addEventListener('click', function(){
   if (_pixelFired) return;
   _pixelFired = true;
   try { fbq('track', 'InitiateCheckout'); } catch(e){}
-  // reseta após 3s para permitir nova tentativa se usuário voltar
-  setTimeout(function(){ _pixelFired = false; }, 1000);
-}
-
-['btn-checkout-oferta'].forEach(function(id){
-  var btn = document.getElementById(id);
-  if(!btn) return;
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
-    var url = btn.getAttribute('href');
-    fireCheckout();
-    window.open(url, '_blank'); // sem delay — evita bloqueio de popup
-  }, { once: false });
+  setTimeout(function(){ _pixelFired = false; }, 2000);
+  // sem preventDefault nem window.open — o href target="_blank" abre sozinho
 });
 
 
