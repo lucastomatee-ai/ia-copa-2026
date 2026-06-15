@@ -285,9 +285,6 @@ h1 span{
 footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top:20px}
 
 
-/* CAROUSEL */
-.cdot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s,transform .2s}
-.cdot.active{background:var(--green);transform:scale(1.3)}
 
 /* ── MOBILE FIRST OPTIMIZATIONS ── */
 @media(max-width:480px){
@@ -588,26 +585,10 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
   <div class="sec-title">Veja o que dizem os membros</div>
   <div class="sec-desc">Conversas reais de quem já está usando o relatório:</div>
 
-  <!-- CARROSSEL -->
-  <div style="position:relative">
-    <div id="carousel" style="overflow:hidden;border-radius:16px;border:1px solid var(--border);touch-action:pan-y">
-      <div id="carousel-track" style="display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform">
-        <img src="https://i.ibb.co/RkTNd3cK/Chat-GPT-Image-13-06-2026-22-38-11.png" alt="Depoimento 1" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
-        <img src="https://i.ibb.co/s9Q19P1M/Chat-GPT-Image-13-06-2026-22-32-14.png" alt="Depoimento 2" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
-        <img src="https://i.ibb.co/hRR5zVxJ/Chat-GPT-Image-13-06-2026-22-41-32.png" alt="Depoimento 3" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
-      </div>
-    </div>
-
-    <!-- Prev / Next -->
-    <button onclick="moveCarousel(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(6,9,19,.75);border:1px solid var(--border-green);color:var(--green);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:2">‹</button>
-    <button onclick="moveCarousel(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(6,9,19,.75);border:1px solid var(--border-green);color:var(--green);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:2">›</button>
-
-    <!-- Dots -->
-    <div id="carousel-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px">
-      <div class="cdot active" onclick="goCarousel(0)"></div>
-      <div class="cdot" onclick="goCarousel(1)"></div>
-      <div class="cdot" onclick="goCarousel(2)"></div>
-    </div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <img src="https://i.ibb.co/RkTNd3cK/Chat-GPT-Image-13-06-2026-22-38-11.png" alt="Depoimento 1" style="width:100%;display:block;border-radius:14px;border:1px solid var(--border)">
+    <img src="https://i.ibb.co/s9Q19P1M/Chat-GPT-Image-13-06-2026-22-32-14.png" alt="Depoimento 2" style="width:100%;display:block;border-radius:14px;border:1px solid var(--border)">
+    <img src="https://i.ibb.co/hRR5zVxJ/Chat-GPT-Image-13-06-2026-22-41-32.png" alt="Depoimento 3" style="width:100%;display:block;border-radius:14px;border:1px solid var(--border)">
   </div>
 </div>
 
@@ -723,31 +704,6 @@ function renderBolao(){
 renderBolao();
 
 
-// Carousel
-let cIdx=0, cTotal=3, cStartX=0, cDragging=false;
-const track=document.getElementById('carousel-track');
-const dots=document.querySelectorAll('.cdot');
-function updateCarousel(){
-  track.style.transform=`translateX(-${cIdx*100}%)`;
-  dots.forEach((d,i)=>d.classList.toggle('active',i===cIdx));
-}
-function moveCarousel(dir){
-  cIdx=(cIdx+dir+cTotal)%cTotal;
-  updateCarousel();
-}
-function goCarousel(i){cIdx=i;updateCarousel();}
-// Auto-play
-let autoplay=setInterval(()=>moveCarousel(1),3500);
-track.parentElement.addEventListener('mouseenter',()=>clearInterval(autoplay));
-track.parentElement.addEventListener('mouseleave',()=>{autoplay=setInterval(()=>moveCarousel(1),3500)});
-// Touch swipe
-track.parentElement.addEventListener('touchstart',e=>{cStartX=e.touches[0].clientX;cDragging=true},{passive:true});
-track.parentElement.addEventListener('touchend',e=>{
-  if(!cDragging)return;
-  const diff=cStartX-e.changedTouches[0].clientX;
-  if(Math.abs(diff)>40)moveCarousel(diff>0?1:-1);
-  cDragging=false;
-},{passive:true});
 
 // Contador flutuante
 const el=document.getElementById('lc');
