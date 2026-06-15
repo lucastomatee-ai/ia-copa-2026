@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1819107922060720');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1819107922060720&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>I.A. da Copa — Relatório de Placares</title>
@@ -388,6 +405,16 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
   .btn{font-size:14px}
 }
 </style>
+<!-- UTMify Pixel -->
+<script>
+  window.pixelId = "6a2f9aff10a54b9c4892197c";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<!-- End UTMify Pixel -->
 </head>
 <body>
 
@@ -422,7 +449,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
 
   <div class="counter-bar">⚡ <strong id="lc">247</strong> pessoas acessaram nas últimas 2 horas · Vagas limitadas</div>
 
-  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+  <a href="#cta-principal" class="btn" onclick="fbq('track','InitiateCheckout')">
     QUERO SABER O PLACAR ANTES DO APITO
     <span class="btn-sub">R$ 5,90 · Entrega imediata no WhatsApp e E-mail 🔒</span>
   </a>
@@ -596,7 +623,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
      7. OFERTA
 ════════════════════════════════ -->
 <div class="section">
-  <div class="offer-box">
+  <div id="cta-principal" class="offer-box">
     <div class="sec-label" style="text-align:center;margin-bottom:8px">Oferta especial de lançamento</div>
     <div class="offer-from">De</div>
     <div class="offer-de">R$ 27,00</div>
@@ -609,7 +636,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
       <li>Liberação imediata</li>
       <li>Garantia de 7 dias</li>
     </ul>
-    <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+    <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn" onclick="fbq('track','InitiateCheckout')" target="_blank">
       QUERO SABER O PLACAR ANTES DO APITO
       <span class="btn-sub">Pix ou cartão · Entrega imediata no WhatsApp e E-mail</span>
     </a>
@@ -672,7 +699,7 @@ footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top
      BOTÃO FLUTUANTE
 ════════════════════════════════ -->
 <div class="sticky-btn">
-  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+  <a href="#cta-principal" class="btn" onclick="fbq('track','InitiateCheckout')">
     SABER O PLACAR ANTES DO APITO — R$5,90
     <span class="btn-sub">Acesso imediato · Garantia de 7 dias</span>
   </a>
