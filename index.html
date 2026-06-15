@@ -650,7 +650,7 @@ function fireCheckout() {
   _pixelFired = true;
   try { fbq('track', 'InitiateCheckout'); } catch(e){}
   // reseta após 3s para permitir nova tentativa se usuário voltar
-  setTimeout(function(){ _pixelFired = false; }, 3000);
+  setTimeout(function(){ _pixelFired = false; }, 1000);
 }
 
 ['btn-checkout-oferta'].forEach(function(id){
@@ -660,7 +660,7 @@ function fireCheckout() {
     e.preventDefault();
     var url = btn.getAttribute('href');
     fireCheckout();
-    setTimeout(function(){ window.open(url, '_blank'); }, 200);
+    window.open(url, '_blank'); // sem delay — evita bloqueio de popup
   }, { once: false });
 });
 
