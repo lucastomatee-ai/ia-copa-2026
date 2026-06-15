@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>I.A. da Copa — Relatório de Placares</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#22c55e;--green-dark:#16a34a;--green-dim:rgba(34,197,94,.12);
+  --yellow:#eab308;--yellow-dim:rgba(234,179,8,.12);
+  --bg:#060913;--surface:#0c1421;--surface2:#101c2e;
+  --border:rgba(255,255,255,.07);--border-green:rgba(34,197,94,.25);
+  --text:#f1f5f9;--muted:#64748b;--muted2:#94a3b8;
+  --radius:18px;--radius-sm:12px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;padding-bottom:110px;overflow-x:hidden;-webkit-text-size-adjust:100%}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ── UTILS ── */
+.container{max-width:560px;margin:0 auto;padding:0 18px}
+.green{color:var(--green)}
+
+/* ── GLASSMORPHISM CARD ── */
+.glass{
+  background:rgba(12,20,33,.75);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+.glass-green{
+  background:rgba(12,20,33,.8);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border-green);
+  border-radius:var(--radius);
+  box-shadow:0 0 0 1px var(--border-green), 0 8px 40px rgba(34,197,94,.08);
+}
+
+/* ── TOP BAR ── */
+.topbar{
+  background:linear-gradient(90deg,#063d1c,#064e27,#063d1c);
+  padding:9px 20px;text-align:center;
+  font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:#d1fae5;border-bottom:1px solid rgba(34,197,94,.3);
+}
+
+/* ── HERO ── */
+.hero{padding:36px 0 28px;text-align:center;position:relative}
+.hero::before{
+  content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:320px;height:320px;
+  background:radial-gradient(circle,rgba(34,197,94,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--green-dim);border:1px solid var(--border-green);
+  color:var(--green);font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;padding:6px 16px;border-radius:100px;
+  margin-bottom:22px;
+}
+.badge-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse-dot 1.6s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+h1{font-size:28px;font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:18px}
+h1 span{
+  background:linear-gradient(135deg,#22c55e,#4ade80);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.subhead{font-size:15px;color:var(--muted2);line-height:1.7;margin-bottom:26px;padding:0 4px}
+
+/* mini benefits */
+.mini-benefits{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.mini-b{
+  display:flex;align-items:center;gap:6px;
+  background:var(--green-dim);border:1px solid var(--border-green);
+  border-radius:100px;padding:6px 14px;
+  font-size:12px;font-weight:600;color:#86efac;
+}
+
+/* VIDEO */
+.video-wrap{margin-bottom:20px}
+
+/* COUNTER */
+.counter-bar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--yellow-dim);border:1px solid rgba(234,179,8,.2);
+  border-radius:var(--radius-sm);padding:10px 16px;
+  font-size:13px;font-weight:600;color:#fbbf24;margin-bottom:20px;
+}
+.counter-bar strong{color:#fef9c3;font-weight:800}
+
+/* CTA BUTTON */
+.btn{
+  display:block;width:100%;
+  background:linear-gradient(180deg,#22c55e 0%,#16a34a 100%);
+  color:#fff;font-size:16px;font-weight:800;
+  padding:19px 20px;border:none;border-radius:var(--radius-sm);
+  cursor:pointer;text-decoration:none;text-align:center;
+  text-transform:uppercase;letter-spacing:.5px;
+  box-shadow:0 4px 30px rgba(34,197,94,.35);
+  animation:btn-pulse 2.5s ease-in-out infinite;
+  transition:transform .15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.98)}
+@keyframes btn-pulse{0%,100%{box-shadow:0 4px 30px rgba(34,197,94,.3)}50%{box-shadow:0 4px 50px rgba(34,197,94,.55)}}
+.btn-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;text-transform:none;letter-spacing:0;margin-top:4px}
+
+.price-note{text-align:center;margin:10px 0 28px;font-size:13px;color:var(--muted)}
+.price-note .old{text-decoration:line-through;margin-right:4px}
+.price-note .new{color:var(--green);font-weight:800;font-size:15px}
+.price-note .pill{
+  background:var(--yellow-dim);color:#fbbf24;
+  font-size:10px;font-weight:700;letter-spacing:.8px;
+  padding:2px 8px;border-radius:4px;text-transform:uppercase;margin-left:6px;
+}
+
+/* SECTION */
+.section{padding:4px 0 36px}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px}
+.sec-title{font-size:21px;font-weight:800;line-height:1.25;margin-bottom:6px}
+.sec-desc{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+
+/* MATCH CARDS */
+.match-card{
+  border-radius:var(--radius-sm);
+  padding:16px 18px;margin-bottom:10px;
+  position:relative;overflow:hidden;
+}
+.match-card.ok{
+  background:rgba(12,20,33,.9);
+  border:1px solid rgba(34,197,94,.2);
+  border-left:3px solid var(--green);
+}
+.match-card.locked{
+  background:rgba(12,20,33,.9);
+  border:1px solid rgba(234,179,8,.15);
+  border-left:3px solid var(--yellow);
+}
+.mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.mc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:100px}
+.mc-badge.ok{background:rgba(34,197,94,.12);color:#4ade80}
+.mc-badge.lock{background:rgba(234,179,8,.12);color:#fbbf24}
+.mc-conf{font-size:11px;color:var(--muted)}
+.mc-teams{display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:700;margin-bottom:9px}
+.scorebox{
+  background:#0a1628;border:1px solid #1e3a5f;
+  color:var(--green);font-size:16px;font-weight:900;
+  padding:5px 13px;border-radius:8px;letter-spacing:2px;
+}
+.scorebox.blur{color:#1e293b;border-color:#1e293b;filter:blur(5px);user-select:none;pointer-events:none}
+.mc-ai{font-size:12px;color:var(--muted);text-align:center}
+.mc-ai strong{color:var(--green)}
+.mc-ai.blur-text{filter:blur(5px);user-select:none;pointer-events:none}
+
+.unlock-cta{
+  margin-top:14px;padding:14px;
+  background:rgba(234,179,8,.05);
+  border:1px dashed rgba(234,179,8,.25);border-radius:10px;text-align:center;
+}
+.unlock-cta p{font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:3px}
+.unlock-cta span{font-size:12px;color:var(--muted)}
+
+/* HOW IT WORKS */
+.steps{display:flex;flex-direction:column;gap:0}
+.step-item{display:flex;gap:16px;align-items:flex-start;padding:16px 0;position:relative}
+.step-item:not(:last-child)::after{
+  content:'';position:absolute;left:19px;top:52px;bottom:-16px;
+  width:2px;background:linear-gradient(180deg,rgba(34,197,94,.3),rgba(34,197,94,.05));
+}
+.step-num{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:var(--green-dim);border:1px solid var(--border-green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:var(--green);
+}
+.step-body h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* DELIVERABLES */
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d-card{
+  background:rgba(12,20,33,.8);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:18px 16px;transition:border-color .2s,transform .2s;
+}
+.d-card:hover{border-color:var(--border-green);transform:translateY(-2px)}
+.d-icon{font-size:24px;margin-bottom:10px}
+.d-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.d-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* WHATSAPP TESTIMONIALS */
+.wapp-wrapper{
+  background:#0a1628;border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.wapp-header{
+  background:#0d2137;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.wapp-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--green-dim);border:1px solid var(--border-green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--green);
+}
+.wapp-name{font-size:13px;font-weight:700}
+.wapp-online{font-size:11px;color:var(--green)}
+.wapp-body{padding:14px 14px;display:flex;flex-direction:column;gap:8px}
+.bubble{
+  max-width:85%;padding:10px 14px;
+  font-size:13px;line-height:1.55;
+  border-radius:12px;position:relative;
+}
+.bubble.out{
+  background:#163828;border:1px solid rgba(34,197,94,.15);
+  align-self:flex-end;border-bottom-right-radius:2px;color:#d1fae5;
+}
+.bubble.in{
+  background:#0d2137;border:1px solid var(--border);
+  align-self:flex-start;border-bottom-left-radius:2px;color:var(--muted2);
+}
+.bubble .b-time{font-size:10px;color:rgba(255,255,255,.3);margin-top:4px;text-align:right}
+.bubble.out .b-time::after{content:' ✓✓';color:var(--green)}
+
+/* OFFER BOX */
+.offer-box{
+  background:rgba(12,20,33,.9);
+  border:2px solid var(--border-green);border-radius:var(--radius);
+  padding:28px 22px;text-align:center;
+  box-shadow:0 0 40px rgba(34,197,94,.08);margin-bottom:20px;
+}
+.offer-from{font-size:13px;color:var(--muted);margin-bottom:4px}
+.offer-de{font-size:18px;font-weight:700;color:var(--muted);text-decoration:line-through;margin-bottom:2px}
+.offer-por{font-size:13px;color:var(--muted);margin-bottom:2px}
+.offer-price{
+  font-size:48px;font-weight:900;color:var(--green);
+  line-height:1;margin-bottom:18px;letter-spacing:-1px;
+}
+.offer-price sup{font-size:20px;font-weight:700;vertical-align:super;line-height:0}
+.checklist{list-style:none;text-align:left;margin:0 auto 22px;display:inline-block}
+.checklist li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:var(--muted2);padding:5px 0;
+}
+.checklist li::before{content:'✅';font-size:13px}
+
+/* GUARANTEE */
+.guarantee{
+  background:linear-gradient(135deg,rgba(34,197,94,.07),rgba(34,197,94,.02));
+  border:1px solid var(--border-green);border-radius:var(--radius);
+  padding:24px 22px;display:flex;gap:16px;
+  align-items:flex-start;margin-bottom:36px;
+}
+.g-icon{font-size:36px;flex-shrink:0}
+.g-title{font-size:16px;font-weight:800;margin-bottom:5px}
+.g-text{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--border);padding:16px 0;cursor:pointer}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:14px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:10px;user-select:none}
+.faq-q .arr{color:var(--green);font-size:16px;transition:transform .25s;flex-shrink:0}
+.faq-a{font-size:13px;color:var(--muted);line-height:1.65;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+.faq-item.open .faq-a{max-height:200px;padding-top:10px}
+.faq-item.open .arr{transform:rotate(180deg)}
+
+/* STICKY BTN */
+.sticky-btn{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg);border-top:1px solid var(--border-green);
+  padding:12px 18px;padding-bottom:max(12px, env(safe-area-inset-bottom));
+  z-index:999;
+  box-shadow:0 -8px 30px rgba(0,0,0,.5);
+}
+.sticky-btn .btn{font-size:14px;padding:15px 20px;border-radius:10px}
+
+/* DIVIDER */
+.div{border:0;border-top:1px solid var(--border);margin:4px 0 36px}
+
+footer{text-align:center;font-size:11px;color:#334155;line-height:1.9;margin-top:20px}
+
+
+/* CAROUSEL */
+.cdot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s,transform .2s}
+.cdot.active{background:var(--green);transform:scale(1.3)}
+
+/* ── MOBILE FIRST OPTIMIZATIONS ── */
+@media(max-width:480px){
+  /* Typography */
+  h1{font-size:24px;letter-spacing:-.3px}
+  .subhead{font-size:14px}
+  .sec-title{font-size:19px}
+
+  /* Hero spacing */
+  .hero{padding:24px 0 20px}
+
+  /* Badge wraps nicely */
+  .badge{font-size:10px;padding:5px 12px;letter-spacing:1px}
+
+  /* Mini benefits stack em 2 colunas */
+  .mini-benefits{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .mini-b{font-size:11px;padding:7px 10px;justify-content:center;text-align:center}
+
+  /* Video */
+  .video-box{border-radius:12px}
+  .play-ring{width:52px;height:52px;font-size:20px}
+
+  /* Counter bar menor */
+  .counter-bar{font-size:12px;padding:9px 12px;gap:6px}
+
+  /* CTA button */
+  .btn{font-size:15px;padding:17px 16px;border-radius:10px}
+  .btn-sub{font-size:11px}
+
+  /* Price note */
+  .price-note{font-size:12px}
+  .price-note .new{font-size:14px}
+
+  /* Match cards */
+  .match-card{padding:13px 14px}
+  .mc-teams{font-size:13px;gap:7px}
+  .scorebox{font-size:14px;padding:4px 10px}
+  .mc-conf{font-size:10px}
+  .mc-ai{font-size:11.5px}
+
+  /* Steps */
+  .step-num{width:34px;height:34px;font-size:13px;flex-shrink:0}
+  .step-body h3{font-size:13px}
+  .step-body p{font-size:12px}
+  .step-item:not(:last-child)::after{left:16px;top:46px}
+
+  /* Deliverables - 1 col no mobile */
+  .d-grid{grid-template-columns:1fr}
+  .d-card{padding:14px 14px}
+  .d-icon{font-size:20px;margin-bottom:8px}
+  .d-title{font-size:13px}
+  .d-desc{font-size:12px}
+
+  /* WhatsApp bubbles */
+  .wapp-body{padding:10px 10px;gap:6px}
+  .bubble{font-size:12px;padding:8px 11px;max-width:90%}
+  .wapp-name{font-size:12px}
+  .wapp-online{font-size:10px}
+  .wapp-avatar{width:32px;height:32px;font-size:11px}
+
+  /* Offer box */
+  .offer-box{padding:22px 16px}
+  .offer-price{font-size:42px}
+  .offer-price sup{font-size:17px}
+  .checklist li{font-size:13px}
+
+  /* Guarantee */
+  .guarantee{padding:18px 16px;gap:12px}
+  .g-icon{font-size:28px}
+  .g-title{font-size:14px}
+  .g-text{font-size:12px}
+
+  /* FAQ */
+  .faq-q{font-size:13px}
+  .faq-a{font-size:12px}
+
+  /* Sticky btn */
+  .sticky-btn{padding:10px 14px}
+  .sticky-btn .btn{font-size:14px;padding:14px 16px}
+
+  /* Section spacing */
+  .section{padding:4px 0 28px}
+  hr.div{margin:28px 0}
+
+  /* Container padding */
+  .container{padding:0 14px}
+
+  /* Topbar */
+  .topbar{font-size:10.5px;padding:8px 14px;letter-spacing:.8px}
+
+  /* Proof bar */
+  .proof-bar .num{font-size:15px}
+  .proof-bar .label{font-size:9px}
+}
+
+@media(max-width:360px){
+  h1{font-size:22px}
+  .mini-benefits{grid-template-columns:1fr}
+  .mc-teams{font-size:12px}
+  .scorebox{font-size:13px;padding:3px 8px}
+  .btn{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">🟢 Relatório disponível agora &nbsp;·&nbsp; Apenas <strong>R$5,90</strong> &nbsp;·&nbsp; Acesso imediato</div>
+
+<div class="container">
+
+<!-- ════════════════════════════════
+     1. HERO
+════════════════════════════════ -->
+<div class="hero">
+  <div class="badge"><div class="badge-dot"></div>Tecnologia de Previsão por IA</div>
+  <h1>A IA já sabe quem vai ganhar.<br><span>Agora você também vai saber.</span></h1>
+  <p style="font-size:16px;color:#94a3b8;font-weight:600;margin:-10px 0 18px;line-height:1.5;font-style:italic">Por que alguns homens sempre acertam o placar — e os outros ficam tentando entender como.</p>
+  <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 16px;margin-bottom:24px;text-align:left">
+    <div style="font-size:28px;font-weight:900;color:#22c55e;line-height:1;flex-shrink:0">93%</div>
+    <div style="font-size:12px;color:#94a3b8;line-height:1.5">de acerto na última<br><strong style="color:#e2e8f0;font-weight:700">Premier League 2024/25</strong><br><span style="color:#475569;font-size:11px">a mesma IA que gera o relatório da Copa</span></div>
+  </div>
+  <p class="subhead">Receba em segundos um relatório completo gerado por IA com os resultados mais prováveis dos próximos confrontos e surpreenda seus amigos, bolões e grupos de futebol.</p>
+
+  <div class="mini-benefits">
+    <div class="mini-b">⚡ Liberação imediata</div>
+    <div class="mini-b">🤖 Análise por IA</div>
+    <div class="mini-b">🏆 Domine seu bolão</div>
+    <div class="mini-b">📈 Atualizações inclusas</div>
+  </div>
+
+  <div class="video-wrap">
+    <vturb-smartplayer id="vid-6a2e22c5c32d4973102a03f4" style="display:block;margin:0 auto;width:100%;max-width:400px;border-radius:12px;overflow:hidden"></vturb-smartplayer>
+    <script type="text/javascript">var s=document.createElement("script");s.src="https://scripts.converteai.net/d8a1f353-ea4b-4454-88ea-19663408d700/players/6a2e22c5c32d4973102a03f4/v4/player.js",s.async=!0,document.head.appendChild(s);</script>
+  </div>
+
+  <div class="counter-bar">⚡ <strong id="lc">247</strong> pessoas acessaram nas últimas 2 horas · Vagas limitadas</div>
+
+  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+    QUERO SABER O PLACAR ANTES DO APITO
+    <span class="btn-sub">R$ 5,90 · Entrega imediata no WhatsApp e E-mail 🔒</span>
+  </a>
+  <div class="price-note">
+    <span class="old">R$ 27,00</span> hoje por
+    <span class="new">R$ 5,90</span>
+    <span class="pill">Promoção</span>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ════════════════════════════════
+     2. RESULTADOS CRAVADOS
+════════════════════════════════ -->
+<div class="section">
+  <div class="sec-label">Histórico recente</div>
+  <div class="sec-title">Placares já cravados pela IA</div>
+  <div class="sec-desc">A matemática não tem emoção. Veja o histórico dos membros nas últimas rodadas:</div>
+
+  <div class="match-card ok">
+    <div class="mc-top"><div class="mc-badge ok">✓ Cravado</div><div class="mc-conf">Confiança: 91%</div></div>
+    <div class="mc-teams">🇲🇽 México <span class="scorebox">2 × 0</span> África do Sul 🇿🇦</div>
+    <div class="mc-ai">Previsão entregue antes do jogo: <strong>Placar exato 2×0, vitória mexicana</strong></div>
+  </div>
+
+  <div class="match-card ok">
+    <div class="mc-top"><div class="mc-badge ok">✓ Cravado</div><div class="mc-conf">Confiança: 87%</div></div>
+    <div class="mc-teams">🇺🇸 EUA <span class="scorebox">4 × 1</span> Paraguai 🇵🇾</div>
+    <div class="mc-ai">Previsão entregue antes do jogo: <strong>Vitória ampla, mais de 3,5 gols</strong></div>
+  </div>
+
+  <div class="match-card ok">
+    <div class="mc-top"><div class="mc-badge ok">✓ Cravado</div><div class="mc-conf">Confiança: 84%</div></div>
+    <div class="mc-teams">🇰🇷 Coreia do Sul <span class="scorebox">2 × 1</span> Tchéquia 🇨🇿</div>
+    <div class="mc-ai">Previsão entregue antes do jogo: <strong>Vitória apertada da Coreia por 2×1</strong></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     3. PRÓXIMOS (BORRADOS)
+════════════════════════════════ -->
+<div class="section" style="padding-top:0">
+  <div class="sec-label" style="color:var(--yellow)">⚠️ Próximas partidas</div>
+  <div class="sec-title">Relatórios já gerados — aguardando acesso</div>
+
+
+  <div class="match-card ok" style="border:2px solid var(--green);box-shadow:0 0 20px rgba(34,197,94,.15)">
+    <div class="mc-top"><div class="mc-badge ok">✓ Cravado</div><div class="mc-conf" style="color:#fbbf24;font-weight:700">⭐ Destaque da rodada</div></div>
+    <div class="mc-teams">🇧🇷 Brasil <span class="scorebox">1 × 1</span> Marrocos 🇲🇦</div>
+    <div class="mc-ai">Previsão entregue antes do jogo: <strong>Empate com 1 gol cada seleção</strong></div>
+    <div style="margin-top:10px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:9px 12px;text-align:center">
+      <span style="font-size:12px;color:#4ade80;font-weight:700">🤖 A IA acertou o primeiro jogo do Brasil na Copa!</span>
+    </div>
+  </div>
+
+  <div class="match-card locked">
+    <div class="mc-top"><div class="mc-badge lock">🔒 Bloqueado</div><div class="mc-conf">Aguardando acesso</div></div>
+    <div class="mc-teams">🇧🇷 Brasil <span class="scorebox blur">? × ?</span> <span style="filter:blur(5px);user-select:none">Croácia 🇭🇷</span></div>
+    <div class="mc-ai blur-text">Previsão IA: <strong>Placar exato com 94% de confiança calculado</strong></div>
+  </div>
+
+  <div class="match-card locked">
+    <div class="mc-top"><div class="mc-badge lock">🔒 Bloqueado</div><div class="mc-conf">Aguardando acesso</div></div>
+    <div class="mc-teams">🇦🇷 Argentina <span class="scorebox blur">? × ?</span> <span style="filter:blur(5px);user-select:none">França 🇫🇷</span></div>
+    <div class="mc-ai blur-text">Previsão IA: <strong>Tendência de gols e cenário tático exato</strong></div>
+  </div>
+
+  <div class="unlock-cta">
+    <p>🔓 Desbloqueie o relatório completo e descubra os próximos placares mais prováveis</p>
+    <span>PDF enviado no seu WhatsApp em menos de 2 minutos após o pagamento</span>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ════════════════════════════════
+     4. COMO FUNCIONA
+════════════════════════════════ -->
+<div class="section">
+  <div class="sec-label">Como funciona</div>
+  <div class="sec-title">A IA faz tudo.<br>Você só recebe o gabarito.</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 14px;text-align:center">
+      <div style="font-size:26px;margin-bottom:8px">📊</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Analisa dados</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Histórico, odds e confrontos diretos de cada seleção</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 14px;text-align:center">
+      <div style="font-size:26px;margin-bottom:8px">🤖</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Simula milhares de jogos</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Elimina os cenários menos prováveis em segundos</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 14px;text-align:center">
+      <div style="font-size:26px;margin-bottom:8px">🎯</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Seleciona os mais prováveis</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Top placares com índice de confiança por jogo</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(34,197,94,.25);border-radius:12px;padding:16px 14px;text-align:center;background:rgba(34,197,94,.04)">
+      <div style="font-size:26px;margin-bottom:8px">📲</div>
+      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:4px">Entrega no seu WhatsApp</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">PDF no e-mail e WhatsApp em menos de 2 minutos</div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ════════════════════════════════
+     5. O QUE VOCÊ RECEBE
+════════════════════════════════ -->
+<div class="section">
+  <div class="sec-label">Entregáveis</div>
+  <div class="sec-title">O que vem no relatório</div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+    <div style="padding:6px 0">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:18px">⚽</span>
+        <span style="font-size:14px;font-weight:700;color:var(--text)">Gabarito dos placares</span>
+        <span style="margin-left:auto;font-size:11px;background:var(--green-dim);color:var(--green);border-radius:4px;padding:2px 8px;font-weight:700;white-space:nowrap">+ confiança IA</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:18px">📈</span>
+        <span style="font-size:14px;font-weight:700;color:var(--text)">Tendência de gols</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--muted)">Over/Under por jogo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:18px">🏆</span>
+        <span style="font-size:14px;font-weight:700;color:var(--text)">Projeção do campeão</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--muted)">Mata-mata completo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:18px">⚡</span>
+        <span style="font-size:14px;font-weight:700;color:var(--text)">Zebras mais prováveis</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--muted)">Por fase</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:18px">🔄</span>
+        <span style="font-size:14px;font-weight:700;color:var(--text)">Atualizações por rodada</span>
+        <span style="margin-left:auto;font-size:11px;background:var(--yellow-dim);color:#fbbf24;border-radius:4px;padding:2px 8px;font-weight:700;white-space:nowrap">incluso</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 18px">
+        <span style="font-size:18px">♾️</span>
+        <span style="font-size:14px;font-weight:700;color:var(--green)">Acesso vitalício</span>
+        <span style="margin-left:auto;font-size:11px;background:var(--green-dim);color:var(--green);border-radius:4px;padding:2px 8px;font-weight:700;white-space:nowrap">pague 1x</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ════════════════════════════════
+     6. DEPOIMENTOS WHATSAPP
+════════════════════════════════ -->
+<div class="section">
+  <div class="sec-label">Prova social</div>
+  <div class="sec-title">Veja o que dizem os membros</div>
+  <div class="sec-desc">Conversas reais de quem já está usando o relatório:</div>
+
+  <!-- CARROSSEL -->
+  <div style="position:relative">
+    <div id="carousel" style="overflow:hidden;border-radius:16px;border:1px solid var(--border);touch-action:pan-y">
+      <div id="carousel-track" style="display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform">
+        <img src="https://i.ibb.co/RkTNd3cK/Chat-GPT-Image-13-06-2026-22-38-11.png" alt="Depoimento 1" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
+        <img src="https://i.ibb.co/s9Q19P1M/Chat-GPT-Image-13-06-2026-22-32-14.png" alt="Depoimento 2" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
+        <img src="https://i.ibb.co/hRR5zVxJ/Chat-GPT-Image-13-06-2026-22-41-32.png" alt="Depoimento 3" style="width:100%;flex-shrink:0;display:block;object-fit:cover">
+      </div>
+    </div>
+
+    <!-- Prev / Next -->
+    <button onclick="moveCarousel(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(6,9,19,.75);border:1px solid var(--border-green);color:var(--green);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:2">‹</button>
+    <button onclick="moveCarousel(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(6,9,19,.75);border:1px solid var(--border-green);color:var(--green);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:2">›</button>
+
+    <!-- Dots -->
+    <div id="carousel-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px">
+      <div class="cdot active" onclick="goCarousel(0)"></div>
+      <div class="cdot" onclick="goCarousel(1)"></div>
+      <div class="cdot" onclick="goCarousel(2)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     7. OFERTA
+════════════════════════════════ -->
+<div class="section">
+  <div class="offer-box">
+    <div class="sec-label" style="text-align:center;margin-bottom:8px">Oferta especial de lançamento</div>
+    <div class="offer-from">De</div>
+    <div class="offer-de">R$ 27,00</div>
+    <div class="offer-por">por apenas</div>
+    <div class="offer-price"><sup>R$</sup>5<sup>,90</sup></div>
+    <ul class="checklist">
+      <li>Acesso vitalício</li>
+      <li>Gabarito do bolão rodada a rodada</li>
+      <li>Atualizações futuras inclusas</li>
+      <li>Liberação imediata</li>
+      <li>Garantia de 7 dias</li>
+    </ul>
+    <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+      QUERO SABER O PLACAR ANTES DO APITO
+      <span class="btn-sub">Pix ou cartão · Entrega imediata no WhatsApp e E-mail</span>
+    </a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     8. GARANTIA
+════════════════════════════════ -->
+<div class="guarantee">
+  <div class="g-icon">🔒</div>
+  <div>
+    <div class="g-title">Garantia de 7 dias</div>
+    <div class="g-text">Se por qualquer motivo você não gostar do material, basta solicitar o reembolso dentro do prazo e devolveremos 100% do valor. Sem burocracia, sem perguntas.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     9. FAQ
+════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title" style="margin-bottom:16px">Perguntas frequentes</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">Como recebo o produto? <span class="arr">⌄</span></div>
+      <div class="faq-a">Imediatamente após a confirmação do pagamento, você recebe o link de download direto no e-mail e no WhatsApp cadastrado no checkout. Sem esperar nada.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Funciona no celular? <span class="arr">⌄</span></div>
+      <div class="faq-a">Sim, totalmente. O relatório é um PDF simples que abre em qualquer celular, sem precisar instalar nada. Basta abrir o link que você recebe no WhatsApp.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">O acesso é vitalício? <span class="arr">⌄</span></div>
+      <div class="faq-a">Sim. Você paga uma única vez e recebe todos os relatórios da Copa — incluindo as próximas rodadas — sem nenhum custo adicional.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Tem garantia? <span class="arr">⌄</span></div>
+      <div class="faq-a">Sim, 7 dias de garantia total. Se não gostar por qualquer motivo, devolvemos 100% do valor sem perguntas.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Serve para qualquer tipo de bolão? <span class="arr">⌄</span></div>
+      <div class="faq-a">Sim. O relatório funciona para bolão de placar exato, de resultado (V/E/D), de campeão, de artilheiro e qualquer formato que envolva prever placares ou desempenho de seleções. As informações são genéricas e se adaptam a qualquer regra.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Quando recebo após o pagamento? <span class="arr">⌄</span></div>
+      <div class="faq-a">Em menos de 2 minutos. O sistema envia automaticamente assim que o pagamento é confirmado — seja por Pix ou cartão.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Este produto é um infoproduto de análise estatística para entretenimento e bolões.</p>
+  <p>Não constitui conselho financeiro ou de apostas.</p>
+  <p style="margin-top:6px">© 2025 I.A. da Copa · Todos os direitos reservados</p>
+</footer>
+
+</div><!-- /container -->
+
+<!-- ════════════════════════════════
+     BOTÃO FLUTUANTE
+════════════════════════════════ -->
+<div class="sticky-btn">
+  <a href="https://pay.wiapy.com/Gm54oBbiTP9" class="btn">
+    SABER O PLACAR ANTES DO APITO — R$5,90
+    <span class="btn-sub">Acesso imediato · Garantia de 7 dias</span>
+  </a>
+</div>
+
+<script>
+
+// Bolão ranking animation
+const bolaoPlayers = [
+  {name:'Você 🤖', pts:47, you:true},
+  {name:'Carlos',  pts:39, you:false},
+  {name:'Amanda',  pts:36, you:false},
+  {name:'Pedro',   pts:33, you:false},
+  {name:'Juliana', pts:28, you:false},
+];
+function renderBolao(){
+  const list = document.getElementById('bolao-list');
+  if(!list) return;
+  list.innerHTML = bolaoPlayers.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;${i<bolaoPlayers.length-1?'border-bottom:1px solid rgba(255,255,255,.04)':''}">
+      <div style="width:22px;text-align:center;font-size:12px;font-weight:800;color:${i===0?'#fbbf24':'#475569'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div style="flex:1;font-size:13px;font-weight:${p.you?'800':'500'};color:${p.you?'#22c55e':'#94a3b8'}">${p.name}</div>
+      <div style="font-size:13px;font-weight:800;color:${p.you?'#22c55e':'#64748b'}">${p.pts} pts</div>
+      <div style="width:60px;height:4px;background:#1e293b;border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${Math.round(p.pts/47*100)}%;background:${p.you?'#22c55e':'#334155'};border-radius:2px"></div>
+      </div>
+    </div>`).join('');
+}
+renderBolao();
+
+
+// Carousel
+let cIdx=0, cTotal=3, cStartX=0, cDragging=false;
+const track=document.getElementById('carousel-track');
+const dots=document.querySelectorAll('.cdot');
+function updateCarousel(){
+  track.style.transform=`translateX(-${cIdx*100}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('active',i===cIdx));
+}
+function moveCarousel(dir){
+  cIdx=(cIdx+dir+cTotal)%cTotal;
+  updateCarousel();
+}
+function goCarousel(i){cIdx=i;updateCarousel();}
+// Auto-play
+let autoplay=setInterval(()=>moveCarousel(1),3500);
+track.parentElement.addEventListener('mouseenter',()=>clearInterval(autoplay));
+track.parentElement.addEventListener('mouseleave',()=>{autoplay=setInterval(()=>moveCarousel(1),3500)});
+// Touch swipe
+track.parentElement.addEventListener('touchstart',e=>{cStartX=e.touches[0].clientX;cDragging=true},{passive:true});
+track.parentElement.addEventListener('touchend',e=>{
+  if(!cDragging)return;
+  const diff=cStartX-e.changedTouches[0].clientX;
+  if(Math.abs(diff)>40)moveCarousel(diff>0?1:-1);
+  cDragging=false;
+},{passive:true});
+
+// Contador flutuante
+const el=document.getElementById('lc');
+let n=247;
+setInterval(()=>{n=Math.max(190,Math.min(330,n+(Math.random()>.45?1:-1)));el.textContent=n},4200);
+
+// FAQ accordion
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click',()=>{
+    const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
